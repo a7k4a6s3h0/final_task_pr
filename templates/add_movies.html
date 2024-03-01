@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}add category page{% endblock %}
+{% block link %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+{% endblock %}
+{% block content %}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="form-outline pt-3 mb-4 text-center">
+                <h3>Add Movies</h3>
+            </div>            
+            <div class="card bg-dark text-light p-4">
+
+                <form action="add_movie", method="post", enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <!--Avatar-->
+                <div>
+                    <div class="d-flex justify-content-center mb-4">
+                        <img id="selectedAvatar" src="https://mdbootstrap.com/img/Photos/Others/placeholder-avatar.jpg"
+                        class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" alt="example placeholder" />
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <div class="btn btn-primary btn-rounded">
+                            <label class="form-label text-white m-1" for="customFile2">Choose file</label>
+                            <input type="file" class="form-control d-none" id="customFile2" name="poster" onchange="displaySelectedImage(event, 'selectedAvatar')" />
+                        </div>
+                    </div>
+                </div>
+
+                    <!-- Name input -->
+                    <div class="form-outline pt-3 mb-4">
+                        <input type="text" id="form4Example1" class="form-control" name="title" />
+                        <label class="form-label" for="form4Example1">Movie Title</label>
+                    </div>
+
+                    <!-- date input -->
+                    <div class="form-outline mb-4">
+                        <label class="la">Select Date: </label>
+                        <div id="datepicker" class="input-group date" data-date-format="yyyy-mm-dd">
+                            <input class="form-control" type="text" name="created" id="created_at" readonly />
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                        </div>
+                    </div>
+
+                    <!-- link field -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="form4Example2" class="form-control" name="youtube_link"/>
+                        <label class="form-label" for="form4Example2">Add Link</label>
+                    </div>
+
+                    <!-- actors fields -->
+                    <div class="form-outline mb-4">
+                        <input type="text" id="form4Example2" class="form-control" name="actors"/>
+                        <label class="form-label" for="form4Example2">Add Actors</label>
+                    </div>
+                    
+                    <div class="form-outline mb-4">
+                        <label for="exampleFormControlSelect1">select</label>
+                        <select class="form-control" id="exampleFormControlSelect1" name="selected">
+                            {% for c in category %}
+                            <option>{{c.category_name}}</option>
+                            {% endfor %}
+                          
+                          
+                        </select>
+                      </div>
+
+                    <!-- Message input -->
+                    <div class="form-outline mb-4">
+                        <textarea class="form-control" id="form4Example3" name="describtion" rows="4"></textarea>
+                        <label class="form-label" for="form4Example3">describtion</label>
+                    </div>
+
+                    
+
+
+                    <!-- Submit button -->
+                    <button type="submit" class="btn btn-primary btn-block mb-4">
+                        Send
+                    </button>
+                    {% if request.user.is_superuser %}
+                    <a href="admin/">Go to Home</a>
+                    
+                    {% else %}
+                    <a href="/">Go to Home</a>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script>
+
+    $(function () {
+        $("#datepicker").datepicker({
+            autoclose: true,
+            todayHighlight: true
+        }).datepicker('update', new Date());
+    });
+
+    {% if messages %}
+    {% for msg in messages %}
+        {%if msg.tags == 'success'%}
+                swal("Good job!", "{{ msg }}", "success")
+        {% elif msg.tags == 'error' %}
+                swal("bad request!", "{{ msg }}", "warning");        
+        {% endif %}
+    {% endfor %}
+  {%endif%}
+
+
+    function displaySelectedImage(event, elementId) {
+    const selectedImage = document.getElementById(elementId);
+    const fileInput = event.target;
+
+    if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            selectedImage.src = e.target.result;
+        };
+
+        reader.readAsDataURL(fileInput.files[0]);
+    }
+}
+</script>
+
+{% endblock %}

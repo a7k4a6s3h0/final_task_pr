@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Admin Home page{% endblock %}
+{% block link %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+{% endblock %}
+{% block content %}
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+  <div class="container-fluid justify-content-between">
+    <!-- Left elements -->
+    <div class="d-flex">
+      <!-- Brand -->
+      <a class="navbar-brand me-2 mb-1 d-flex align-items-center" href="#">
+        <img
+          src="https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp"
+          height="20"
+          alt="MDB Logo"
+          loading="lazy"
+          style="margin-top: 2px;"
+        />
+      </a>
+
+      <!-- Search form -->
+      <form class="input-group w-auto my-auto d-none d-sm-flex" method="get" action="/search">
+        {%csrf_token%}
+        <input
+          autocomplete="off"
+          type="search"
+          class="form-control rounded"
+          placeholder="Search"
+          style="min-width: 125px;"
+          name="item"
+        />
+        <span class="input-group-text border-0 d-none d-lg-flex"
+          ><i class="fas fa-search"></i
+        ></span>
+      </form>
+    </div>
+    <!-- Left elements -->
+
+    <!-- Center elements -->
+    <ul class="navbar-nav flex-row d-none d-md-flex">
+      <li class="nav-item me-3 me-lg-1 active">
+        <a class="nav-link" href="admin/">
+          <span><i class="fas fa-home fa-lg"></i></span>
+          <span class="badge rounded-pill badge-notification bg-danger">1</span>
+        </a>
+      </li>
+
+      <li class="nav-item me-3 me-lg-1">
+        <a class="nav-link" href="/add_cate">
+          <span>Add Category</i></span>
+        </a>
+      </li>
+
+      <li class="nav-item me-3 me-lg-1">
+        <a class="nav-link" href="/add_movie">
+          <span>Add Movies</i></span>
+        </a>
+      </li>
+
+      <li class="nav-item me-3 me-lg-1">
+        <a class="nav-link" href="/added_movie">
+          <span>Added Movies</i></span>
+        </a>
+      </li>
+
+      <li class="nav-item me-3 me-lg-1">
+        <a class="nav-link" href="#">
+          <span><i class="fas fa-users fa-lg"></i></span>
+          <span class="badge rounded-pill badge-notification bg-danger">2</span>
+        </a>
+      </li>
+      <li class="nav-item me-3 me-lg-1">
+        <a class="nav-link" href="del_bl">
+          <span>block user or del</i></span>
+        </a>
+      </li>
+    </ul>
+    <!-- Center elements -->
+
+    <!-- Right elements -->
+    <ul class="navbar-nav flex-row">
+      <li class="nav-item me-3 me-lg-1">
+        <a class="nav-link d-sm-flex align-items-sm-center" href="profile">
+          <img
+            src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
+            class="rounded-circle"
+            height="22"
+            alt="Black and White Portrait of a Man"
+            loading="lazy"
+          />
+          <strong class="d-none d-sm-block ms-1"> admin : {{request.user.username}}</strong>
+        </a>
+      </li>
+      
+      <li class="nav-item dropdown me-3 me-lg-1">
+        <a
+          data-mdb-dropdown-init
+          class="nav-link dropdown-toggle hidden-arrow"
+          href="logout"
+          id="navbarDropdownMenuLink"
+          role="button"
+          aria-expanded="false"
+        >
+          <i class="fas fa-chevron-circle-down fa-lg">Logout</i>
+        </a>
+        <ul
+          class="dropdown-menu dropdown-menu-end"
+          aria-labelledby="navbarDropdownMenuLink"
+        >
+        </ul>
+      </li>
+    </ul>
+    <!-- Right elements -->
+  </div>
+</nav>
+<!-- Navbar -->
+
+
+<div class="container mt-5 mb-5">
+    {% if movies %}
+        {% for category, movie_set in movies.items %}
+            {% if movie_set %}
+                <footer class="bg-body-tertiary text-center text-lg-start mb-4">
+                    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+                        <a class="text-body" href="https://mdbootstrap.com/">{{ category }}</a>
+                    </div>
+                </footer>
+                <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
+                    {% for movie in movie_set %}
+                        <div class="col">
+                            <div class="card h-50">
+                                <img src="{{ movie.image.url }}" class="card-img-top" alt="Skyscrapers">
+                                <div class="card-body">
+                                    <h5 class="card-title">movie title : {{ movie.movie_title }}</h5>
+                                    <p class="card-text">movie actors name : {{ movie.actors }}</p>
+                                    <p class="card-text">movie relase data : {{ movie.release_date }}</p>
+                                    <p class="card-text">about movie : {{ movie.describtion }}</p>
+                                    <a href="{{ movie.youtube_link }}">youtube_link TRailer video</a>&nbsp;&nbsp;
+                                    <a href="{%url 'reviews' movie.id %}">see comments</a>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">Last updated {{ movie.created_at1 }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <div class="form-outline pt-3 mb-4 text-center">
+            <h3>NO Movies Added</h3>
+        </div> 
+    {% endif %}
+</div>
+
+<section class="">
+    <!-- Footer -->
+    <footer class="text-center text-white" style="background-color: #0a4275;">
+      <!-- Grid container -->
+      <div class="container p-4 pb-0">
+        <!-- Section: CTA -->
+        <section class="">
+          <p class="d-flex justify-content-center align-items-center">
+            <span class="me-3">Register for free</span>
+            <a href="login" data-mdb-ripple-init type="button" class="btn btn-outline-light btn-rounded">
+              Sign up!
+            </a>
+          </p>
+        </section>
+        <!-- Section: CTA -->
+      </div>
+      <!-- Grid container -->
+  
+      <!-- Copyright -->
+      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2020 Copyright:
+        <a class="text-white" href="https://mdbootstrap.com/"></a>
+      </div>
+      <!-- Copyright -->
+    </footer>
+    <!-- Footer -->
+  </section>
+
+
+
+<script>
+// Initialization for ES Users
+import { Dropdown, initMDB } from "mdb-ui-kit";
+
+initMDB({ Dropdown });
+
+
+// Initialization for ES Users
+import { Carousel, initMDB } from "mdb-ui-kit";
+
+initMDB({ Carousel });
+
+</script>
+{% endblock %}<!-- Navbar-->

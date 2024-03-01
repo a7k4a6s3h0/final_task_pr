@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+
+<section class="vh-100 gradient-custom">
+  <div class="container py-5 h-100">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-12 col-lg-9 col-xl-7">
+        <div class="card shadow-2-strong card-profile" style="border-radius: 15px;">
+          <div class="card-body p-4 p-md-5">
+            <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Profile</h3>
+            <div class="text-center">
+              <!-- Profile Content -->
+              <div class="mb-3">
+                <img src="https://snworksceo.imgix.net/dtc/3f037af6-87ce-4a37-bb37-55b48029727d.sized-1000x1000.jpg?w=1000" class="img-fluid rounded-circle" alt="Profile Picture" width="150">
+              </div>
+              <h5 class="card-title mb-3">{{user_data.username}}</h5>
+              <!-- Email -->
+              <p class="card-text">Email: {{user_data.email}}</p>
+              <!-- Edit Email Button -->
+              <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editEmailModal">Edit profile</button>
+  
+              <a href="/">got to home</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Edit Email Modal -->
+<div class="modal fade" id="editEmailModal" tabindex="-1" aria-labelledby="editEmailModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editEmailModalLabel">Edit profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post" action="profile">
+        {% csrf_token %}
+      <div class="modal-body">
+        
+          <div class="mb-3">
+            <label for="newEmail" class="form-label">New username</label>
+            <input type="text" class="form-control" id="newEmail" name="username" placeholder="Enter new username">
+          </div>
+          <div class="mb-3">
+            <label for="newEmail" class="form-label">New email</label>
+            <input type="email" class="form-control" id="newEmail" name="email" placeholder="Enter new email">
+          </div>
+      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+ 
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script> -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+        {% if messages %}
+    {% for msg in messages %}
+        {%if msg.tags == 'success'%}
+                swal("Good job!", "{{ msg }}", "success")
+        {% elif msg.tags == 'error' %}
+                swal("bad request!", "{{ msg }}", "warning");        
+        {% endif %}
+    {% endfor %}
+  {%endif%}
+</script>
+{% endblock %}

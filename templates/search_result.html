@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}search result page{% endblock %}
+{% block link %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+{% endblock %}
+{% block content %}
+
+
+<div class="container mt-5 mb-5">
+    <div class="form-outline pt-3 mb-4 text-center">
+      {% if request.user.is_superuser %}
+      <a href="admin/">Go to Home</a>
+      
+      {% else %}
+      <a href="/">Go to Home</a>
+      {% endif %}
+    </div>
+    {% if result %}
+    
+
+    {% for m in result %}
+    <footer class="bg-body-tertiary text-center text-lg-start">
+        <!-- Copyright -->
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+            {{m.category_name.category_name}}
+          <a class="text-body" href="https://mdbootstrap.com/"></a>
+        </div>
+        <!-- Copyright -->
+      </footer>
+
+      <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
+        <div class="col">
+            <div class="card h-50">
+                <img src="{{ m.image.url }}" class="card-img-top" alt="Skyscrapers">
+                <div class="card-body">
+                    <h5 class="card-title">{{ m.movie_title }}</h5>
+                    <p class="card-text">{{ m.actors }}</p>
+                    <p class="card-text">{{ m.release_date }}</p>
+                    <p class="card-text">{{ m.describtion }}</p>
+                    <a href="{{ m.youtube_link }}">Youtube Trailer video</a>
+                    <a href="{%url 'reviews' m.id %}">see comments</a>
+                </div>
+                <div class="card-footer d-flex justify-content-between align-items-center">
+                    <small class="text-muted">Last updated {{ m.created_at1 }}</small>
+                  
+                </div>
+            </div>
+        </div>
+</div>
+      {% endfor %}
+      {% else %}
+      <div class="form-outline pt-3 mb-4 text-center">
+        <h3>No  Movies Found</h3>
+    </div>  
+      {% endif %}
+</div>
+
+
+<section class="">
+    <!-- Footer -->
+
+    
+ 
+    <footer class="text-center text-white" style="background-color: #0a4275;">
+      <!-- Grid container -->
+      <div class="container p-4 pb-0">
+        <!-- Section: CTA -->
+        <section class="">
+          <p class="d-flex justify-content-center align-items-center">
+            <span class="me-3">Register for free</span>
+            <button data-mdb-ripple-init type="button" class="btn btn-outline-light btn-rounded">
+              Sign up!
+            </button>
+          </p>
+        </section>
+        <!-- Section: CTA -->
+      </div>
+      <!-- Grid container -->
+  
+      <!-- Copyright -->
+      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2020 Copyright:
+        <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+      </div>
+      <!-- Copyright -->
+    </footer>
+    <!-- Footer -->
+  </section>
+
+
+
+<script>
+// Initialization for ES Users
+import { Dropdown, initMDB } from "mdb-ui-kit";
+
+initMDB({ Dropdown });
+
+
+// Initialization for ES Users
+import { Carousel, initMDB } from "mdb-ui-kit";
+
+initMDB({ Carousel });
+
+</script>
+{% endblock %}<!-- Navbar-->

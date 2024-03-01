@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}usermanagement page{% endblock %}
+{% block link %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-outline pt-3 mb-4 text-center">
+                
+                <a href="/admin">Go to Home</a>
+                
+              </div>
+            <table class="table table-striped mt-5">
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">username</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Block</th>
+                    <th scope="col">Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for tb in user_datas %}
+                    {% if not tb.is_superuser %}
+                    
+                    <tr>
+                        <th scope="row">{{tb.id}}</th>
+                        <td>{{tb.username}}</td>
+                        <td>{{tb.email}}</td>
+                        {% if tb.is_active %}
+                        <form action="del_bl" method="post">
+                            {% csrf_token %}
+                            <input type='hidden' name='action' value='block'>
+                            <input type='hidden' name='id' value='{{tb.id}}'>
+                            <td><button type="submit" class="btn btn-danger">Block</button></td>
+                        </form>
+                        {% else %}
+                        <form action="del_bl" method="post">
+                            {% csrf_token %}
+                            <input type='hidden' name='action' value='unblock'>
+                            <input type='hidden' name='id' value='{{tb.id}}'>
+                            <td><button type="submit" class="btn btn-danger">unblock</button></td>
+                        </form>
+                        {% endif %}
+                        <form action="del_bl" method="post">
+                            {% csrf_token %}
+                            <input type='hidden' name='action' value='delete'>
+                            <input type='hidden' name='id' value='{{tb.id}}'>
+                            <td><button type="submit" class="btn btn-success">Delete</button></td>
+                        </form>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                  
+                </tbody>
+              </table>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
